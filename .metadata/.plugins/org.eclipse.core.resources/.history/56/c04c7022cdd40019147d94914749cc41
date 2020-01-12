@@ -1,0 +1,124 @@
+
+public class MaxHeap {
+	int[] heap;
+	int count; // to know how many values we inserter to the array
+
+	public MaxHeap(int capacity) { // default constructor to initialize size of array
+		heap = new int[capacity];
+		count = 0;
+	}
+
+	public MaxHeap(int[] arr)// constructor that gets full array
+	{
+		this.count = arr.length;
+		heap = new int[count];
+		for (int i = 0; i < arr.length; i++) {
+			heap[i] = arr[i];
+		}
+		buildMaxHeap(heap);
+	}
+
+	private void heapify(int i) {
+		int left = leftChild(i);
+		int right = rightChild(i);
+		int max = i;
+
+		if (left < count) {
+			if (heap[i] < heap[left])
+				max = left; // if child is greater, needs to swap it up
+			else
+				max = i;
+		}
+		if (right < count)
+			if (heap[right] > heap[max])
+				max = right;
+		if (max != i) {
+			swap(max, i);
+			heapify(max);
+		}
+	}
+
+	private void buildMaxHeap(int[] heap) {
+		for (int i = (heap.length - 1) / 2; i >= 0; i--) { // starting from the last father that has a child
+			heapify(i);
+		}
+	}
+
+	public boolean insert(int value) {
+		if (count == heap.length) // if array is full, return false
+			return false;
+		heap[count++] = value;
+		swapUp(count - 1); // Swapping up if needed, according to the value
+		return true;
+	}
+
+	private void swapUp(int i) {
+		if (i == 0)
+			return;
+		int p = parent(i);
+		if (heap[p] < heap[i])
+			swap(p, i);
+		swapUp(p);
+	}
+
+	private void swap(int p, int i) {
+		int temp = heap[p];
+		heap[p] = heap[i];
+		heap[i] = temp;
+	}
+
+	private int parent(int i) {
+		return (i - 1) / 2;
+	}
+
+	private int leftChild(int p) {
+		return p * 2 + 1;
+	}
+
+	private int rightChild(int p) {
+		return p * 2 + 2; // Extract
+	}
+
+	public int extractMaxValue() {
+		int temp = heap[0]; // the max value in maxHeap is always the root
+		heap[0] = heap[count - 1];
+		heapify(count - 1);
+
+		return temp;
+	}
+
+	public void heapSort(int[] arr) {
+		buildMaxHeap(arr);
+		int size = arr.length-1;
+		for (int i = size - 1; i > 0; i--) {
+			swap(0, size);
+			size--;
+			heapify(0);
+
+		}
+	}
+
+	public boolean isMaxHeap(int[] arr) {
+		for (int i = 0; i <= (count - 1) / 2; i++) {
+			int left = leftChild(i);
+			int right = rightChild(i);
+			if (left < count && arr[i] < arr[left])
+				return false;
+			if (right < count && arr[i] < arr[right])
+				return false;
+		}
+		return true;
+	}
+
+	public String toString() {
+		String str = "[";
+		for (int i = 0; i < heap.length; i++) {
+			if (i + 1 == heap.length)
+				str = str + heap[i] + "]";
+			else
+				str = str + heap[i] + " ,";
+		}
+		return str;
+	}
+
+}

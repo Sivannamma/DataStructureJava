@@ -1,0 +1,25 @@
+import java.util.Arrays;
+
+public class InsertionSort {
+	public static void insertonSort(int[] arr) {
+
+		for (int i = 1; i < arr.length; i++) {
+			int key = arr[i];
+			int j = arr[i - 1];
+			while (j >= 0 && key < arr[j]) {
+				arr[j + 1] = arr[j];
+				j--;
+			}
+
+		}
+	}
+
+	public static void main(String[] args) {
+		int[] arr = { 1, 7, 4, 2, 6, 9, 12, 16, 83, 29 };
+		System.out.println("before sorting the array: " + Arrays.toString(arr));
+		insertonSort(arr);
+		System.out.println("after sorting the array: " + Arrays.toString(arr));
+
+	}
+
+}

@@ -1,0 +1,195 @@
+class NodeB {
+	int k;
+	int p;
+	NodeB left;
+	NodeB right;
+
+	public NodeB(int k, int p) {
+		this.k = k;
+		this.p = p;
+		left = right = null;
+	}
+
+	public String toString() {
+		return "(" + k + ", " + p + ")";
+	}
+}
+
+public class BinarySeachTreeWithKeyAndPriorty {
+	NodeB root;
+	int size;
+
+	public BinarySeachTreeWithKeyAndPriorty() {
+		root = null;
+		size = 0;
+	}
+
+	public boolean insert(int k, int p) {
+
+		if (root == null) { // if the tree is empty; we can insert the element to the root
+			root = new NodeB(k, p); // initializing the Node with the element
+			size++; // because we inserted an element
+			return true;
+		}
+		// if not, we need to find its right place
+
+		NodeB n = root;
+		boolean flag = false;
+		while (!flag) {
+			if (k < n.k) { // if it< means we go left
+				if (n.left == null) { // if spot null, fit it there
+					if (p < n.p) {
+						n.left = new NodeB(k, p);
+						size++;
+						return true;
+					} else
+						return false;
+				} else // else, continue to promote until we find an open spot
+					n = n.left;
+			} else if (k > n.k) { // means < we go right
+				if (n.right == null) {
+					if (p < n.p) {
+						n.right = new NodeB(k, p);
+						size++;
+						return true;
+					} else
+						return false;
+				} else
+					n = n.right;
+			}
+		}
+		return true;
+	}
+
+	public boolean search(int k) { // to search if value is in our tree
+		NodeB n = root;
+		boolean ans = false;
+		while (n != null && !ans) {
+			if (k == n.k)
+				return true;
+			else if (k > n.k)
+				n = n.right;
+			else if (k < n.k)
+				n = n.left;
+		}
+		return ans;
+	}
+
+	public void delete(int k) {
+		root = delete(root, k);
+	}
+
+	public NodeB delete(NodeB node, int elem) {
+		if (node == null) // base case if the tree is empty
+			return node;
+		// otherwise, we go down the tree
+		if (elem < node.k)
+			node.left = delete(node.left, elem);
+		else if (elem > node.k)
+			node.right = delete(node.right, elem);
+		// means the element is equals to node.data, and this is the node to be deleted
+		else {
+			if (node.left == null && node.right == null)
+				return null;
+			// a case with a node with only one child
+			if (node.left == null)
+				return node.right;
+			else if (node.right == null)
+				return node.left;
+
+			node.k = predecessor(node.right); // finding the min successor
+			node.right = delete(node.right, node.k); // deleting the successor because we replaced it
+		}
+		return node;
+	}
+
+	public int predecessor(NodeB node) { // the smallest among the maximum
+		int minValue = node.k;
+		while (node.left != null) {
+			minValue = node.left.k;
+			node = node.left;
+		}
+		return minValue;
+	}
+
+	public void inOrder() {
+		inOrder(root);
+	}
+
+	private void inOrder(NodeB node) {
+		if (node != null) {
+			inOrder(node.left);
+			System.out.print(node + ", ");
+			inOrder(node.right);
+		}
+	}
+
+	public void preOrder() {
+		preOrder(root);
+	}
+
+	private void preOrder(NodeB node) {
+		if (node != null) {
+			System.out.print(node + ", ");
+			preOrder(node.left);
+			preOrder(node.right);
+		}
+	}
+
+	public void postOrder() {
+		postOrder(root);
+	}
+
+	private void postOrder(NodeB node) {
+		if (node != null) {
+			postOrder(node.left);
+			postOrder(node.right);
+			System.out.print(node + ", ");
+		}
+	}
+
+	public int height() {
+		return height(root) - 1;
+	}
+
+	public int height(NodeB tree) {
+		if (tree == null)
+			return 0;
+		return 1 + Math.max(height(tree.left), height(tree.right));
+	}
+
+	public int numOfElements(NodeB node) {
+		if (node == null)
+			return 0;
+		return 1 + (numOfElements(node.left) + numOfElements(node.right));
+	}
+
+	public boolean isBalanced() { // if the three is balanced
+		int heightLeft = height(root.left);
+		int heightRight = height(root.right);
+		return (Math.abs(heightRight - heightLeft) > 1 ? false : true);
+
+	}
+
+	public int less(NodeB node, int x) {
+		int[] arr = { 0 };
+		return less(node, node, x, arr);
+	}
+
+	public int less(NodeB current, NodeB prev, int x, int[] arr) {
+		if (x < current.k) {
+			prev = current;
+			return less(current.left, prev, x, arr);
+		}
+		if (x > current.k) {
+			prev = current;
+			arr[0] += numOfElements(prev.left) + 1;
+			return less(current.right, prev, x, arr);
+		}
+		if (x == current.k) {
+			arr[0] += numOfElements(current.left);
+		}
+		return arr[0];
+
+	}
+}

@@ -1,0 +1,20 @@
+import java.util.Arrays;
+
+public class InsertionSort {
+	public static void insertonSort(int [] arr) {
+		int i=0;
+		int j=0;
+		for (i  = 0;  < arr.length; ++) {
+			
+		}
+	}
+
+	public static void main(String[] args) {
+		int[] arr = { 1, 7, 4, 2, 6, 9, 12, 16, 83, 29 };
+		System.out.println("before sorting the array: " + Arrays.toString(arr));
+		insertonSort(arr);
+		System.out.println("after sorting the array: " + Arrays.toString(arr));
+
+	}
+
+}

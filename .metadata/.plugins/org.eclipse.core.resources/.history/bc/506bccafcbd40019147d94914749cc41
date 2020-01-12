@@ -1,0 +1,13 @@
+import java.util.Arrays;
+
+public class MaxHeapMain {
+
+	public static void main(String[] args) {
+		int[] heap1 = { 1, 9, 3, 8, 6, 2, 7, 5, 31, 4, 11, 18, 16, 20 };
+		System.out.println("before making it a max heap: " + Arrays.toString(heap1));
+
+		MaxHeap s = new MaxHeap(heap1);
+		System.out.println("making s to be maxHeap using heap1: " + s.toString());
+	}
+
+}

@@ -1,0 +1,327 @@
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
+public class practice {
+	public static void sort(Queue<Integer> q) {
+		Stack<Integer> temp = new Stack<Integer>();
+		Queue<Integer> s = new LinkedList<Integer>();
+		s.add(q.poll());
+		while (!q.isEmpty()) {
+			int save = q.poll();
+			while (save > s.peek()) {
+				temp.push(s.poll());
+			}
+			s.add(save);
+			while (!temp.isEmpty()) {
+				s.add(temp.pop());
+			}
+		}
+		q = s;
+	}
+
+	public static void reverse(Stack<Integer> t) {
+		Queue<Integer> q = new LinkedList<Integer>();
+		while (!t.isEmpty()) {
+			q.add(t.pop());
+		}
+		while (!q.isEmpty()) {
+			t.push(q.poll());
+		}
+
+	}
+
+	public static int equalTails(LinkedList<Integer> a, LinkedList<Integer> b) {
+		int count = 0;
+		int times = a.size() - b.size();
+		int aIndex = a.size() - 1;
+		int bIndex = b.size() - 1;
+		while (aIndex >= times && bIndex >= 0 && a.get(aIndex) == b.get(bIndex)) {
+			count++;
+			aIndex--;
+			bIndex--;
+		}
+		return count;
+
+	}
+
+	public static String isLeaf(int data, NodeB current) {
+		if (current == null)
+			return "not a vertex";
+		if (data < current.data)
+			return isLeaf(data, current.left);
+		if (data > current.data)
+			return isLeaf(data, current.right);
+		else {
+			if (current.left == null && current.right == null)
+				return "is a leaf";
+			else
+				return "not a leaf";
+		}
+	}
+
+	public static void sortArrayByTwoStacks(int[] arr) {
+		Stack<Integer> complete = new Stack<Integer>();
+		Stack<Integer> temp = new Stack<Integer>();
+		complete.push(arr[0]);
+		for (int i = 1; i < arr.length; i++) {
+			if (arr[i] < complete.peek())
+				complete.push(arr[i]);
+			else {
+				while (!complete.isEmpty() && arr[i] > complete.peek()) { // inserting to the temp stack
+					temp.push(complete.pop());
+				}
+				complete.push(arr[i]);
+				while (!temp.isEmpty()) { // inserting back to complete
+					complete.push(temp.pop());
+				}
+			}
+		}
+		for (int s : complete) {
+			System.out.println(s);
+		}
+	}
+
+	public static boolean isClosingString(String str) {
+		Stack<Character> stack = new Stack<Character>();
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '(' || (str.charAt(i) == '[' || (str.charAt(i)) == '{'))
+				stack.push(str.charAt(i));
+			if (stack.isEmpty() && (str.charAt(i) == ')' || (str.charAt(i) == '}' || (str.charAt(i)) == ']')))
+				return false;
+			if (str.charAt(i) == ')' && !stack.isEmpty() && stack.pop() != '(')
+				return false;
+			if (str.charAt(i) == ']' && !stack.isEmpty() && stack.pop() != '[')
+				return false;
+			if (str.charAt(i) == '}' && !stack.isEmpty() && stack.pop() != '{')
+				return false;
+
+		}
+		return stack.isEmpty();
+	}
+
+	public static boolean isSymmetricalAfterDot(String str) {
+
+		if (str.length() % 2 == 0)
+			return false;
+
+		Stack<Character> stack = new Stack<Character>();
+		boolean flag = true;
+
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '.')
+				flag = false;
+			if (flag)
+				stack.push(str.charAt(i));
+
+			if (!flag && !stack.isEmpty()) {
+				if (str.charAt(i + 1) != stack.pop())
+					return false;
+			}
+		}
+		return true;
+	}
+
+	public static String[] combine(String[] a, String[] b, String[] c) {
+		int arr = a.length;
+		int brr = b.length;
+		int crr = c.length;
+
+		if (arr <= brr && arr <= crr) {
+			String[] temp = new String[arr];
+			return combHelp(temp, a, b, c);
+		} else if (brr <= arr && brr <= crr) {
+			String[] temp = new String[brr];
+			return combHelp(temp, b, a, c);
+		} else {
+			String[] temp = new String[crr];
+			return combHelp(temp, c, a, b);
+		}
+	}
+
+	public static String[] combHelp(String[] temp, String[] min, String[] second, String[] third) {
+		int k = 0;
+		for (int i = 0; i < min.length; i++) {
+			if (isExsist(min[i], second) && isExsist(min[i], third))
+				temp[k++] = min[i];
+		}
+		return temp;
+	}
+
+	public static boolean isExsist(String str, String[] array) {
+		int low = 0;
+		int high = array.length - 1;
+		while (low <= high) {
+			int mid = (low + high) / 2;
+			if (str.equals(array[mid]))
+				return true;
+			else if (str.hashCode() > array[mid].hashCode())
+				low = mid + 1;
+			else
+				high = mid - 1;
+		}
+
+		return false;
+	}
+
+	public static String stringReverse(String s) {
+		return stringHelp(s, "", s.length() - 1);
+	}
+
+	public static String stringHelp(String s, String str, int i) {
+		if (i == 0)
+			return str + s.charAt(0);
+		str += s.charAt(i);
+		return stringHelp(s, str, i - 1);
+	}
+
+//	public static int intReverseRecursia(int n) {
+//		int temp = n;
+//		int count = 0;
+//		while (temp != 0) {
+//			count++;
+//			temp = temp / 10;
+//		}
+//		return intHelp(n, count);
+//	}
+//
+//	public static int intHelp(int n, int count) {
+//		if (count == 1)
+//			return n;
+//		else {
+//			return intHelp((int) (n % Math.pow(10, count-1)), count - 1)*10 + n/10;
+//			
+//		}
+//		
+//	}
+
+	public static int intReverse(int n) {
+		int temp = n;
+		int count = 0;
+		while (temp != 0) {
+			count++;
+			temp = temp / 10;
+		}
+		for (int i = 0; i < count; i++) {
+			if (i + 1 == count)
+				temp = (temp + n % 10);
+			else
+				temp = (temp + n % 10) * 10;
+
+			n = n / 10;
+		}
+		return temp;
+	}
+
+	public static void main(String[] args) {
+//		System.out.println(intReverse(1234));
+//		System.out.println(intReverseRecursia(123));
+//		System.out.println(stringReverse("sivan"));
+//		String[] a = { "aba", "ball", "dog", "gigi", "zebra" };
+//		String[] b = { "aba", "ball", "dog", "gigi", "zebra" };
+//		String[] c = { "aba", "ball", "dog", "gigi", "zebra" };
+//		String[] temp = combine(a, b, c);
+//
+//		for (int i = 0; i < temp.length; i++) {
+//			System.out.println(temp[i]);
+
+//		String correct = "{[2*(6+7)]+4}*(3+2)";
+//		String inCorrect = "{(6*2)+7[6+7}] + [7+5]";
+//		System.out.println(isClosingString(correct));
+//		System.out.println(isClosingString(inCorrect));
+//
+//		System.out.println(isSymmetricalAfterDot("1234.4321")); // true
+//		System.out.println(isSymmetricalAfterDot("1234.321")); // false
+//		System.out.println(isSymmetricalAfterDot("1234.4325")); // false
+
+//		int[] arr = { 10, 1, 11, 0, 13, 2, 9, 7, 5, 14 };
+//		sortArrayByTwoStacks(arr);
+
+//		BinarySearchTree tree = new BinarySearchTree();
+//		tree.insert(10);
+//		tree.insert(7);
+//		tree.insert(14);
+//		tree.insert(6);
+//		tree.insert(9);
+//		tree.insert(13);
+//		tree.insert(15);
+//		tree.insert(5);
+//		tree.insert(12);
+//
+//		System.out.println(tree.numOfElements(tree.root.right));
+//		System.out.println(tree.less(tree.root, 9));
+//		LinkedList<Integer> l1 = new LinkedList<Integer>();
+//		LinkedList<Integer> l2 = new LinkedList<Integer>();
+//
+//		l1.add(80);
+//		l1.add(60);
+//		l1.add(50);
+//		l1.add(40);
+//		l1.add(30);
+//		l1.add(20);
+//		l1.add(10);
+//		l1.add(0);
+//		l1.add(2);
+//		l1.add(3);
+//		l1.add(4);
+//
+//		l2.add(100);
+//		l2.add(120);
+//		l2.add(2);
+//		l2.add(3);
+//		l2.add(4);
+//
+//		System.out.println(equalTails(l1, l2));
+//
+//		Stack<Integer> t = new Stack<Integer>();
+//		t.push(6);
+//		t.push(5);
+//		t.push(4);
+//		t.push(3);
+//		t.push(2);
+//		t.push(1);
+//
+//		// before change
+//		for (Integer n : t) {
+//			System.out.print(n + ", ");
+//		}
+//		System.out.println();
+//		reverse(t);
+//		// after change
+//		for (Integer n : t) {
+//			System.out.print(n + ", ");
+//		}
+		
+		
+		Queue<Integer> s = new LinkedList<Integer>();
+		s.add(6);
+		s.add(14);
+		s.add(79);
+		s.add(0);
+		s.add(3);
+		s.add(81);
+		s.add(4);
+		s.add(100);
+		s.add(1);
+		//before change
+		System.out.print("the start is -->");
+		for (Integer n : s) {
+		System.out.print(n + ", ");
+	}
+		System.out.println();
+		
+		// after change
+		sort(s);
+		System.out.print("the start is -->");
+		for (Integer n : s) {
+		System.out.print(n + ", ");
+		
+		
+		
+
+	}
+	
+	
+
+}

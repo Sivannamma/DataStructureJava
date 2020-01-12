@@ -1,0 +1,11 @@
+
+public class MaxHeap {
+	int[] heap;
+	int count; // to know how many values we inserter to the array
+
+	public MaxHeap(int capacity) {
+		heap = new int[capacity];
+		count = 0;
+	}
+
+}
